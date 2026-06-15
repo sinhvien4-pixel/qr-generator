@@ -5,7 +5,9 @@ const WHOLE_WORD_TERMS: string[] = [
   'porn', 'porno', 'pornography', 'xxx', 'sex', 'sexy', 'nude', 'naked',
   'nsfw', 'explicit', 'hentai', 'fetish', 'onlyfans', 'camgirl', 'camsex',
   'escort', 'hooker', 'prostitute', 'blowjob', 'handjob', 'cum', 'orgasm',
-  'anal', 'pornhub',
+  'anal', 'pornhub', 'xvideos', 'redtube', 'youporn', 'brazzers', 'bangbros', 'porncom', 'xnxx', 'spankbang', 'pornhd', 'tube8', 'keezmovies', 'tnaflix', 'youjizz',
+  'jav', 'javhub', 'javhd', 'javbus', 'javlibrary', 'javmost', 'avgle', 'avporn', 'avhub', 
+  'pornstar', 'pussy', 'dick', 'vagina', 'messex', 'BTS', 
   // Unaccented Vietnamese kept with word boundary to avoid substring hits
   'dit', 'buoi',
 ]
@@ -20,8 +22,10 @@ const SUBSTRING_TERMS: string[] = [
   'khiêu dâm', 'phim sex', 'phim người lớn', 'gái gọi', 'mại dâm',
   'thủ dâm', 'quan hệ tình dục', '18+',
   'con mẹ mày', 'con chó đẻ',
-  'chịch', 'chịch nhau',
-  'hiếp', 'hiếp dâm',
+  'chịch', 'chịch nhau','chịt',
+  'hiếp', 'hiếp dâm', 'hiếp dâm tập thể', 'ngu', 'đần', 'đần độn', 'đần thối',  
+  'đụ mẹ mày', 'đụ con mẹ mày', 'đụ con mẹ nhà mày', 'mày', 'tao', 'lz', 'cc', 'đm', 'đmm', 'đcm', 'đm mẹ mày', 'đm con mẹ mày', 'đm con mẹ nhà mày',
+
 ]
 
 function escapeRegex(s: string): string {
