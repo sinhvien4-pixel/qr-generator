@@ -101,11 +101,13 @@ export default function App() {
         createdAt: serverTimestamp(),
       })
       setSaveMsg('Saved to history!')
-    } catch {
-      setSaveMsg('Save failed — check Firebase config.')
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : String(err)
+      console.error('Firestore save error:', msg)
+      setSaveMsg(`Save failed: ${msg}`)
     } finally {
       setSaving(false)
-      setTimeout(() => setSaveMsg(''), 3000)
+      setTimeout(() => setSaveMsg(''), 6000)
     }
   }
 
