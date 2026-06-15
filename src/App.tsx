@@ -1,9 +1,10 @@
-import { useState, useRef, useCallback } from 'react'
+import { useState, useRef, useCallback, useEffect } from 'react'
 import { QRCodeCanvas } from 'qrcode.react'
 import { HexColorPicker } from 'react-colorful'
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore'
 import { db } from './lib/firebase'
 import type { QRType, WiFiConfig } from './types'
+import { validateContent } from './utils/contentFilter'
 
 const QR_SIZES = [150, 200, 300, 400, 500] as const
 const TABS: { id: QRType; label: string; icon: string }[] = [
@@ -44,10 +45,22 @@ export default function App() {
   const [saving, setSaving] = useState(false)
   const [saveMsg, setSaveMsg] = useState('')
 
+  const [isBlocked, setIsBlocked] = useState(false)
+
   const canvasRef = useRef<HTMLDivElement>(null)
   const logoInputRef = useRef<HTMLInputElement>(null)
+  const wasBlockedRef = useRef(false)
 
   const qrValue = buildQRValue(activeTab, inputs, wifi)
+
+  useEffect(() => {
+    const blocked = qrValue ? !validateContent(qrValue) : false
+    if (blocked && !wasBlockedRef.current) {
+      alert('Content blocked due to NSFW policy.')
+    }
+    wasBlockedRef.current = blocked
+    setIsBlocked(blocked)
+  }, [qrValue])
 
   const setInput = (key: string, val: string) =>
     setInputs(prev => ({ ...prev, [key]: val }))
@@ -89,6 +102,10 @@ export default function App() {
 
   const handleSave = async () => {
     if (!qrValue) return
+    if (!validateContent(qrValue)) {
+      alert('Content blocked due to NSFW policy.')
+      return
+    }
     setSaving(true)
     setSaveMsg('')
     try {
@@ -202,7 +219,14 @@ export default function App() {
             <div className="bg-slate-800/60 rounded-2xl p-6 flex flex-col items-center gap-6 sticky top-6">
               <h2 className="font-semibold text-slate-200 self-start">Preview</h2>
 
-              {qrValue ? (
+              {isBlocked ? (
+                <div
+                  className="flex items-center justify-center rounded-xl bg-red-900/30 border border-red-700/50 text-red-400 text-sm font-medium"
+                  style={{ width: size, height: size, maxWidth: '100%' }}
+                >
+                  Content blocked due to NSFW policy.
+                </div>
+              ) : qrValue ? (
                 <div ref={canvasRef} className="rounded-xl overflow-hidden shadow-2xl">
                   <QRCodeCanvas
                     value={qrValue}
@@ -235,21 +259,21 @@ export default function App() {
               <div className="flex flex-wrap gap-3 w-full justify-center">
                 <button
                   onClick={handleDownload}
-                  disabled={!qrValue}
+                  disabled={!qrValue || isBlocked}
                   className="flex items-center gap-2 px-5 py-2.5 bg-purple-600 hover:bg-purple-500 disabled:opacity-40 disabled:cursor-not-allowed rounded-xl font-medium text-sm transition-all"
                 >
                   ⬇️ Download PNG
                 </button>
                 <button
                   onClick={handleCopy}
-                  disabled={!qrValue}
+                  disabled={!qrValue || isBlocked}
                   className="flex items-center gap-2 px-5 py-2.5 bg-slate-700 hover:bg-slate-600 disabled:opacity-40 disabled:cursor-not-allowed rounded-xl font-medium text-sm transition-all"
                 >
                   {copied ? '✅ Copied!' : '📋 Copy Image'}
                 </button>
                 <button
                   onClick={handleSave}
-                  disabled={!qrValue || saving}
+                  disabled={!qrValue || saving || isBlocked}
                   className="flex items-center gap-2 px-5 py-2.5 bg-emerald-700 hover:bg-emerald-600 disabled:opacity-40 disabled:cursor-not-allowed rounded-xl font-medium text-sm transition-all"
                 >
                   {saving ? '⏳ Saving…' : '💾 Save'}
