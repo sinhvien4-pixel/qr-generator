@@ -24,7 +24,7 @@ const SUBSTRING_TERMS: string[] = [
   'con mẹ mày', 'con chó đẻ',
   'chịch', 'chịch nhau','chịt',
   'hiếp', 'hiếp dâm', 'hiếp dâm tập thể', 'ngu', 'đần', 'đần độn', 'đần thối',  
-  'đụ mẹ mày', 'đụ con mẹ mày', 'đụ con mẹ nhà mày', 'mày', 'tao', 'lz', 'cc', 'đm', 'đmm', 'đcm', 'đm mẹ mày', 'đm con mẹ mày', 'đm con mẹ nhà mày',
+  'đụ mẹ mày', 'đụ con mẹ mày', 'đụ con mẹ nhà mày', 'mày', 'tao', 'lz', 'cc', 'đm', 'đmm', 'đcm', 'đm mẹ mày', 'đm con mẹ mày', 'đm con mẹ nhà mày'
 
 ]
 
